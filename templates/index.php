@@ -1,7 +1,7 @@
 <?php
 /**
- * The 86 board: every product as a big tap-to-toggle availability switch,
- * grouped by category, with an instant search filter.
+ * The availability board: every product as a big tap-to-toggle availability
+ * switch, grouped by category, with an instant search filter.
  */
 
 if ( ! function_exists( 'wc_get_products' ) ) {
@@ -11,14 +11,14 @@ if ( ! function_exists( 'wc_get_products' ) ) {
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title><?php wp_app_title( '86 Board' ); ?></title>
+		<title><?php wp_app_title( 'Availability Board' ); ?></title>
 		<?php wp_app_head(); ?>
 	</head>
 	<body>
 		<?php wp_app_body_open(); ?>
 		<main style="max-width:480px;margin:3rem auto;padding:0 1rem;text-align:center;">
-			<h1><?php esc_html_e( '86 Board needs WooCommerce', '86-board' ); ?></h1>
-			<p><?php esc_html_e( 'Install and activate WooCommerce, then reload this page.', '86-board' ); ?></p>
+			<h1><?php esc_html_e( 'Availability Board needs WooCommerce', 'availability-board' ); ?></h1>
+			<p><?php esc_html_e( 'Install and activate WooCommerce, then reload this page.', 'availability-board' ); ?></p>
 		</main>
 		<?php wp_app_body_close(); ?>
 	</body>
@@ -41,7 +41,7 @@ $available_count = 0;
 
 foreach ( $products as $product ) {
 	$terms         = get_the_terms( $product->get_id(), 'product_cat' );
-	$category_name = ( $terms && ! is_wp_error( $terms ) && ! empty( $terms ) ) ? $terms[0]->name : __( 'Other', '86-board' );
+	$category_name = ( $terms && ! is_wp_error( $terms ) && ! empty( $terms ) ) ? $terms[0]->name : __( 'Other', 'availability-board' );
 
 	if ( ! isset( $groups[ $category_name ] ) ) {
 		$groups[ $category_name ] = [];
@@ -61,7 +61,7 @@ $total_count = count( $products );
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php wp_app_title( '86 Board' ); ?></title>
+	<title><?php wp_app_title( 'Availability Board' ); ?></title>
 	<?php wp_app_head(); ?>
 	<style>
 		:root { color-scheme: light dark; }
@@ -94,13 +94,13 @@ $total_count = count( $products );
 	<?php wp_app_body_open(); ?>
 
 	<main>
-		<h1><?php esc_html_e( '86 Board', '86-board' ); ?></h1>
+		<h1><?php esc_html_e( 'Availability Board', 'availability-board' ); ?></h1>
 		<p class="summary" id="board-summary">
 			<?php
 			echo esc_html(
 				sprintf(
 					/* translators: 1: available count, 2: total count */
-					__( '%1$d of %2$d available', '86-board' ),
+					__( '%1$d of %2$d available', 'availability-board' ),
 					$available_count,
 					$total_count
 				)
@@ -109,12 +109,12 @@ $total_count = count( $products );
 		</p>
 
 		<div class="search-form">
-			<input type="search" id="board-search" placeholder="<?php esc_attr_e( 'Search menu items', '86-board' ); ?>">
+			<input type="search" id="board-search" placeholder="<?php esc_attr_e( 'Search products', 'availability-board' ); ?>">
 		</div>
 
 		<div id="board-list">
 			<?php if ( empty( $products ) ) : ?>
-				<p class="empty-state"><?php esc_html_e( 'No products found. Add some in WooCommerce first.', '86-board' ); ?></p>
+				<p class="empty-state"><?php esc_html_e( 'No products found. Add some in WooCommerce first.', 'availability-board' ); ?></p>
 			<?php else : ?>
 				<?php foreach ( $groups as $category_name => $group_products ) : ?>
 					<div class="category" data-category>
@@ -129,7 +129,7 @@ $total_count = count( $products );
 									<div class="item-name"><?php echo esc_html( $product->get_name() ); ?></div>
 									<div class="item-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 								</div>
-								<span class="item-state"><?php echo $is_available ? esc_html__( 'Available', '86-board' ) : esc_html__( "86'd", '86-board' ); ?></span>
+								<span class="item-state"><?php echo $is_available ? esc_html__( 'Available', 'availability-board' ) : esc_html__( 'Unavailable', 'availability-board' ); ?></span>
 								<label class="toggle">
 									<input type="checkbox" class="availability-toggle" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>" <?php checked( $is_available ); ?>>
 									<span class="toggle-slider"></span>
@@ -144,10 +144,10 @@ $total_count = count( $products );
 
 	<script>
 	var boardConfig = {
-		restUrl: <?php echo wp_json_encode( esc_url_raw( rest_url( \EightySixBoard\App::REST_NAMESPACE ) ) ); ?>,
+		restUrl: <?php echo wp_json_encode( esc_url_raw( rest_url( \AvailabilityBoard\App::REST_NAMESPACE ) ) ); ?>,
 		nonce: <?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?>,
-		availableLabel: <?php echo wp_json_encode( __( 'Available', '86-board' ) ); ?>,
-		unavailableLabel: <?php echo wp_json_encode( __( "86'd", '86-board' ) ); ?>
+		availableLabel: <?php echo wp_json_encode( __( 'Available', 'availability-board' ) ); ?>,
+		unavailableLabel: <?php echo wp_json_encode( __( 'Unavailable', 'availability-board' ) ); ?>
 	};
 
 	function updateSummary() {

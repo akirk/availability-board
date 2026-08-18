@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name: 86 Board
+ * Plugin Name: Availability Board
  * Description: A WordPress app powered by WpApp.
  * Version: 1.0.0
  * Author: Alex Kirk
- * Text Domain: 86-board
+ * Text Domain: availability-board
  * Requires PHP: 7.4
  */
 
-namespace EightySixBoard;
+namespace AvailabilityBoard;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -18,7 +18,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Autoloader for plugin classes.
 spl_autoload_register( function( $class ) {
-    $prefix = 'EightySixBoard\\';
+    $prefix = 'AvailabilityBoard\\';
     $len = strlen( $prefix );
     if ( strncmp( $prefix, $class, $len ) !== 0 ) {
         return;

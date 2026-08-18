@@ -1,6 +1,6 @@
 <?php
 
-namespace EightySixBoard;
+namespace AvailabilityBoard;
 
 use WpApp\BaseApp;
 use WpApp\WpApp;
@@ -9,7 +9,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 class App extends BaseApp {
-	const REST_NAMESPACE = '86-board/v1';
+	const REST_NAMESPACE = 'availability-board/v1';
 
 	public function __construct() {
 		$this->app = new WpApp(
@@ -17,7 +17,7 @@ class App extends BaseApp {
 			$this->get_url_path(),
 			[
 				'app_name'            => $this->get_plugin_name(),
-				'app_name_textdomain' => '86-board',
+				'app_name_textdomain' => 'availability-board',
 				'require_capability'  => 'manage_woocommerce',
 				'my_apps'             => $this->get_plugin_name(),
 			]
@@ -27,7 +27,7 @@ class App extends BaseApp {
 	}
 
 	protected function get_url_path(): string {
-		return '86-board';
+		return 'availability-board';
 	}
 
 	protected function get_template_dir(): string {
@@ -36,12 +36,12 @@ class App extends BaseApp {
 
 	protected function get_plugin_name(): string {
 		if ( ! function_exists( 'get_file_data' ) ) {
-			return '86 Board';
+			return 'Availability Board';
 		}
 
-		$plugin_data = get_file_data( dirname( __DIR__ ) . '/86-board.php', [ 'name' => 'Plugin Name' ] );
+		$plugin_data = get_file_data( dirname( __DIR__ ) . '/availability-board.php', [ 'name' => 'Plugin Name' ] );
 
-		return $plugin_data['name'] ?: '86 Board';
+		return $plugin_data['name'] ?: 'Availability Board';
 	}
 
 	protected function setup_database(): void {
@@ -102,14 +102,14 @@ class App extends BaseApp {
 	 */
 	public function rest_set_availability( WP_REST_Request $request ) {
 		if ( ! function_exists( 'wc_get_product' ) ) {
-			return new WP_Error( 'eighty_six_board_no_woocommerce', __( 'WooCommerce is not active.', '86-board' ), [ 'status' => 503 ] );
+			return new WP_Error( 'availability_board_no_woocommerce', __( 'WooCommerce is not active.', 'availability-board' ), [ 'status' => 503 ] );
 		}
 
 		$product_id = (int) $request['id'];
 		$product    = wc_get_product( $product_id );
 
 		if ( ! $product ) {
-			return new WP_Error( 'eighty_six_board_not_found', __( 'Product not found.', '86-board' ), [ 'status' => 404 ] );
+			return new WP_Error( 'availability_board_not_found', __( 'Product not found.', 'availability-board' ), [ 'status' => 404 ] );
 		}
 
 		$in_stock = (bool) $request['in_stock'];

@@ -1,15 +1,15 @@
 {
 	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
 	"meta": {
-		"title": "86 Board",
-		"description": "A one-tap availability board for WooCommerce: mark a menu item, service, or product 86'd the moment it runs out, no wp-admin required.",
+		"title": "Availability Board",
+		"description": "A one-tap availability board for WooCommerce: mark a menu item, service, or product unavailable the moment it runs out, no wp-admin required.",
 		"author": "Alex Kirk",
 		"categories": [
 			"Apps",
 			"WooCommerce"
 		]
 	},
-	"landingPage": "/86-board/",
+	"landingPage": "/availability-board/",
 	"steps": [
 		{
 			"step": "installPlugin",
@@ -29,13 +29,13 @@
 			"step": "installPlugin",
 			"pluginData": {
 				"resource": "git:directory",
-				"url": "https://github.com/akirk/86-board",
+				"url": "https://github.com/akirk/availability-board",
 				"ref": "dist/main",
 				"refType": "branch"
 			},
 			"options": {
 				"activate": true,
-				"targetFolderName": "86-board"
+				"targetFolderName": "availability-board"
 			}
 		}
 	]

@@ -1,6 +1,6 @@
 {
-    "name": "86-board/86-board",
-    "description": "86 Board - A WordPress app powered by WpApp",
+    "name": "availability-board/availability-board",
+    "description": "Availability Board - A WordPress app powered by WpApp",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {
@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "EightySixBoard\\": "src/"
+            "AvailabilityBoard\\": "src/"
         }
     },
     "version": "0.1.0",
@@ -19,6 +19,6 @@
         }
     ],
     "config": {
-        "autoloader-suffix": "86board"
+        "autoloader-suffix": "availabilityboard"
     }
 }
