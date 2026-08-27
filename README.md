@@ -4,6 +4,8 @@ A one-tap availability board for WooCommerce: mark a menu item, service, or prod
 
 [Try Availability Board in WordPress Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/akirk/availability-board/main/blueprint.json)
 
+[Try it in OpenStation](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/akirk/availability-board/main/blueprint-openstation.json) — the same app opened in desktop mode with the [OpenStation](https://github.com/WordPress/openstation) plugin.
+
 In wp-admin, marking a product out of stock means Products → find it → Edit → Inventory tab → toggle → Update: several clicks, one item at a time. Availability Board turns that into one screen: every product as a big switch, grouped by category, with a live search field. Flip it off when you run out, flip it back on when you're restocked.
 
 - Reads and writes through WooCommerce's own product stock status; it keeps no data of its own.
