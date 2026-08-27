@@ -19,7 +19,7 @@ class App extends BaseApp {
 				'app_name'            => $this->get_plugin_name(),
 				'app_name_textdomain' => 'availability-board',
 				'require_capability'  => 'manage_woocommerce',
-				'my_apps'             => $this->get_plugin_name(),
+				'launcher'            => $this->get_plugin_name(),
 			]
 		);
 
