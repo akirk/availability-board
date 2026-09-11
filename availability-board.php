@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Availability Board
  * Description: A WordPress app powered by WpApp.
- * Version: 1.0.0
+ * Version: 1.0.0+12d827ea1a21
  * Author: Alex Kirk
  * Text Domain: availability-board
  * Tested up to: 7.1

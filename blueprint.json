@@ -1,70 +1,70 @@
 {
-	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
-	"meta": {
-		"title": "Availability Board",
-		"description": "A one-tap availability board for WooCommerce: mark a menu item, service, or product unavailable the moment it runs out, no wp-admin required.",
-		"author": "Alex Kirk",
-		"categories": [
-			"Apps",
-			"WooCommerce"
-		]
-	},
-	"landingPage": "/availability-board/",
-	"login": true,
-	"steps": [
-		{
-			"step": "installPlugin",
-			"pluginData": {
-				"resource": "wordpress.org/plugins",
-				"slug": "woocommerce"
-			},
-			"options": {
-				"activate": true
-			}
-		},
-		{
-			"step": "runPHP",
-			"code": "<?php\nrequire_once '/wordpress/wp-load.php';\n\nif ( ! class_exists( 'WC_Product_Simple' ) ) {\n\treturn;\n}\n\n$menu = array(\n\t'Appetizers' => array(\n\t\tarray(\n\t\t\t'name'      => 'Garlic Bread',\n\t\t\t'price'     => 6,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Caesar Salad',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Calamari',\n\t\t\t'price'     => 12,\n\t\t\t'available' => false,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Soup of the Day',\n\t\t\t'price'     => 7,\n\t\t\t'available' => true,\n\t\t),\n\t),\n\t'Mains'      => array(\n\t\tarray(\n\t\t\t'name'      => 'Grilled Salmon',\n\t\t\t'price'     => 24,\n\t\t\t'available' => false,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Margherita Pizza',\n\t\t\t'price'     => 16,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Ribeye Steak',\n\t\t\t'price'     => 32,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Mushroom Risotto',\n\t\t\t'price'     => 18,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Fish and Chips',\n\t\t\t'price'     => 17,\n\t\t\t'available' => true,\n\t\t),\n\t),\n\t'Desserts'   => array(\n\t\tarray(\n\t\t\t'name'      => 'Tiramisu',\n\t\t\t'price'     => 8,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Chocolate Lava Cake',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Cheesecake',\n\t\t\t'price'     => 8,\n\t\t\t'available' => true,\n\t\t),\n\t),\n\t'Drinks'     => array(\n\t\tarray(\n\t\t\t'name'      => 'House Red Wine',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'House White Wine',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Craft Lager',\n\t\t\t'price'     => 7,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Sparkling Water',\n\t\t\t'price'     => 4,\n\t\t\t'available' => true,\n\t\t),\n\t),\n);\n\nforeach ( $menu as $category_name => $items ) {\n\t$term = term_exists( $category_name, 'product_cat' );\n\tif ( ! $term ) {\n\t\t$term = wp_insert_term( $category_name, 'product_cat' );\n\t}\n\tif ( is_wp_error( $term ) ) {\n\t\tcontinue;\n\t}\n\t$term_id = is_array( $term ) ? (int) $term['term_id'] : (int) $term;\n\n\tforeach ( $items as $item ) {\n\t\t$product = new WC_Product_Simple();\n\t\t$product->set_name( $item['name'] );\n\t\t$product->set_regular_price( (string) $item['price'] );\n\t\t$product->set_status( 'publish' );\n\t\t$product->set_catalog_visibility( 'visible' );\n\t\t$product->set_manage_stock( false );\n\t\t$product->set_stock_status( $item['available'] ? 'instock' : 'outofstock' );\n\t\t$product->set_category_ids( array( $term_id ) );\n\t\t$product->save();\n\t}\n}\n"
-		},
-		{
-			"step": "installPlugin",
-			"pluginData": {
-				"resource": "git:directory",
-				"url": "https://github.com/akirk/availability-board",
-				"ref": "main",
-				"refType": "branch"
-			},
-			"options": {
-				"activate": false,
-				"targetFolderName": "availability-board"
-			}
-		},
-		{
-			"step": "installPlugin",
-			"pluginData": {
-				"resource": "git:directory",
-				"url": "https://github.com/akirk/wp-app",
-				"ref": "main",
-				"refType": "branch",
-				"path": "src"
-			},
-			"options": {
-				"activate": false,
-				"targetFolderName": "availability-board/vendor/akirk/wp-app"
-			}
-		},
-		{
-			"step": "mkdir",
-			"path": "wordpress/wp-content/plugins/availability-board/vendor"
-		},
-		{
-			"step": "writeFile",
-			"path": "/wordpress/wp-content/plugins/availability-board/vendor/autoload.php",
-			"data": "<?php\nrequire_once __DIR__ . '/akirk/wp-app/functions.php';\nspl_autoload_register( static function ( $class ) {\n\t$map = [\n\t\t'WpApp\\\\BaseApp' => 'abstract-baseapp.php',\n\t\t'WpApp\\\\BaseStorage' => 'BaseStorage.php',\n\t\t'WpApp\\\\Masterbar' => 'class-masterbar.php',\n\t\t'WpApp\\\\Openstation' => 'class-openstation.php',\n\t\t'WpApp\\\\Pwa' => 'class-pwa.php',\n\t\t'WpApp\\\\Registry' => 'class-registry.php',\n\t\t'WpApp\\\\Router' => 'class-router.php',\n\t\t'WpApp\\\\Settings' => 'class-settings.php',\n\t\t'WpApp\\\\WpApp' => 'class-wpapp.php',\n\t\t'WpApp\\\\Rest\\\\Access' => 'rest/class-access.php',\n\t\t'WpApp\\\\Rest\\\\Private_Posts_Controller' => 'rest/class-private-posts-controller.php',\n\t\t'WpApp\\\\Rest\\\\Private_Terms_Controller' => 'rest/class-private-terms-controller.php',\n\t];\n\tif ( isset( $map[ $class ] ) ) {\n\t\trequire_once __DIR__ . '/akirk/wp-app/' . $map[ $class ];\n\t}\n} );\n"
-		},
-		{
-			"step": "activatePlugin",
-			"pluginPath": "availability-board/availability-board.php"
-		}
-	]
+    "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+    "meta": {
+        "title": "Availability Board",
+        "description": "A one-tap availability board for WooCommerce: mark a menu item, service, or product unavailable the moment it runs out, no wp-admin required.",
+        "author": "Alex Kirk",
+        "categories": [
+            "Apps",
+            "WooCommerce"
+        ]
+    },
+    "landingPage": "/availability-board/",
+    "login": true,
+    "steps": [
+        {
+            "step": "installPlugin",
+            "pluginData": {
+                "resource": "wordpress.org/plugins",
+                "slug": "woocommerce"
+            },
+            "options": {
+                "activate": true
+            }
+        },
+        {
+            "step": "runPHP",
+            "code": "<?php\nrequire_once '/wordpress/wp-load.php';\n\nif ( ! class_exists( 'WC_Product_Simple' ) ) {\n\treturn;\n}\n\n$menu = array(\n\t'Appetizers' => array(\n\t\tarray(\n\t\t\t'name'      => 'Garlic Bread',\n\t\t\t'price'     => 6,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Caesar Salad',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Calamari',\n\t\t\t'price'     => 12,\n\t\t\t'available' => false,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Soup of the Day',\n\t\t\t'price'     => 7,\n\t\t\t'available' => true,\n\t\t),\n\t),\n\t'Mains'      => array(\n\t\tarray(\n\t\t\t'name'      => 'Grilled Salmon',\n\t\t\t'price'     => 24,\n\t\t\t'available' => false,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Margherita Pizza',\n\t\t\t'price'     => 16,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Ribeye Steak',\n\t\t\t'price'     => 32,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Mushroom Risotto',\n\t\t\t'price'     => 18,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Fish and Chips',\n\t\t\t'price'     => 17,\n\t\t\t'available' => true,\n\t\t),\n\t),\n\t'Desserts'   => array(\n\t\tarray(\n\t\t\t'name'      => 'Tiramisu',\n\t\t\t'price'     => 8,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Chocolate Lava Cake',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Cheesecake',\n\t\t\t'price'     => 8,\n\t\t\t'available' => true,\n\t\t),\n\t),\n\t'Drinks'     => array(\n\t\tarray(\n\t\t\t'name'      => 'House Red Wine',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'House White Wine',\n\t\t\t'price'     => 9,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Craft Lager',\n\t\t\t'price'     => 7,\n\t\t\t'available' => true,\n\t\t),\n\t\tarray(\n\t\t\t'name'      => 'Sparkling Water',\n\t\t\t'price'     => 4,\n\t\t\t'available' => true,\n\t\t),\n\t),\n);\n\nforeach ( $menu as $category_name => $items ) {\n\t$term = term_exists( $category_name, 'product_cat' );\n\tif ( ! $term ) {\n\t\t$term = wp_insert_term( $category_name, 'product_cat' );\n\t}\n\tif ( is_wp_error( $term ) ) {\n\t\tcontinue;\n\t}\n\t$term_id = is_array( $term ) ? (int) $term['term_id'] : (int) $term;\n\n\tforeach ( $items as $item ) {\n\t\t$product = new WC_Product_Simple();\n\t\t$product->set_name( $item['name'] );\n\t\t$product->set_regular_price( (string) $item['price'] );\n\t\t$product->set_status( 'publish' );\n\t\t$product->set_catalog_visibility( 'visible' );\n\t\t$product->set_manage_stock( false );\n\t\t$product->set_stock_status( $item['available'] ? 'instock' : 'outofstock' );\n\t\t$product->set_category_ids( array( $term_id ) );\n\t\t$product->save();\n\t}\n}\n"
+        },
+        {
+            "step": "installPlugin",
+            "pluginData": {
+                "resource": "git:directory",
+                "url": "https://github.com/akirk/availability-board",
+                "ref": "dist/pr-4",
+                "refType": "branch"
+            },
+            "options": {
+                "activate": false,
+                "targetFolderName": "availability-board"
+            }
+        },
+        {
+            "step": "installPlugin",
+            "pluginData": {
+                "resource": "git:directory",
+                "url": "https://github.com/akirk/wp-app",
+                "ref": "dist/pr-4",
+                "refType": "branch",
+                "path": "src"
+            },
+            "options": {
+                "activate": false,
+                "targetFolderName": "availability-board/vendor/akirk/wp-app"
+            }
+        },
+        {
+            "step": "mkdir",
+            "path": "wordpress/wp-content/plugins/availability-board/vendor"
+        },
+        {
+            "step": "writeFile",
+            "path": "/wordpress/wp-content/plugins/availability-board/vendor/autoload.php",
+            "data": "<?php\nrequire_once __DIR__ . '/akirk/wp-app/functions.php';\nspl_autoload_register( static function ( $class ) {\n\t$map = [\n\t\t'WpApp\\\\BaseApp' => 'abstract-baseapp.php',\n\t\t'WpApp\\\\BaseStorage' => 'BaseStorage.php',\n\t\t'WpApp\\\\Masterbar' => 'class-masterbar.php',\n\t\t'WpApp\\\\Openstation' => 'class-openstation.php',\n\t\t'WpApp\\\\Pwa' => 'class-pwa.php',\n\t\t'WpApp\\\\Registry' => 'class-registry.php',\n\t\t'WpApp\\\\Router' => 'class-router.php',\n\t\t'WpApp\\\\Settings' => 'class-settings.php',\n\t\t'WpApp\\\\WpApp' => 'class-wpapp.php',\n\t\t'WpApp\\\\Rest\\\\Access' => 'rest/class-access.php',\n\t\t'WpApp\\\\Rest\\\\Private_Posts_Controller' => 'rest/class-private-posts-controller.php',\n\t\t'WpApp\\\\Rest\\\\Private_Terms_Controller' => 'rest/class-private-terms-controller.php',\n\t];\n\tif ( isset( $map[ $class ] ) ) {\n\t\trequire_once __DIR__ . '/akirk/wp-app/' . $map[ $class ];\n\t}\n} );\n"
+        },
+        {
+            "step": "activatePlugin",
+            "pluginPath": "availability-board/availability-board.php"
+        }
+    ]
 }
