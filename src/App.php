@@ -72,7 +72,7 @@ class App extends BaseApp {
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_set_availability' ],
 				'permission_callback' => static function () {
-					return current_user_can( 'manage_woocommerce' );
+					return is_user_logged_in();
 				},
 				'args'                => [
 					'id'       => [
