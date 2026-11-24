@@ -113,7 +113,7 @@ class App extends BaseApp {
 		}
 
 		$in_stock = (bool) $request['in_stock'];
-		$product->set_stock_status( $in_stock ? 'outofstock' : 'instock' );
+		$product->set_stock_status( $in_stock ? 'instock' : 'outofstock' );
 		$product->save();
 
 		return rest_ensure_response(
